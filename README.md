@@ -36,6 +36,7 @@ codigo_diretor_responsavel, nome_diretor_responsavel, email_diretor_responsavel
 ### Modelo conceitual do esboço oferecido:
 
 ![diagrama_conceitual.drawio](https://hackmd.io/_uploads/SyATIvDAR.png)
+
 Temos duas tabelas: `cliente` e `produto`.
 
 - **Tabela cliente:**
