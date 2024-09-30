@@ -110,7 +110,7 @@ Temos duas tabelas: `cliente` e `produto`.
 ## Consultas SQL simples e complexas em um banco de dados relacional
 Um exemplo de modelo de banco de dados com relacionamento muitos-para-muitos pode ser o de um e-commerce que tem produtos e categorias, onde um produto pode pertencer a várias categorias e uma categoria pode estar associada a vários produtos. Nesse caso, teríamos duas tabelas: "produtos" e "categorias", com uma tabela intermediária "produtos_categorias" para relacionar os produtos às suas categorias.
 
-
+```sql
 CREATE TABLE produtos (
 id INT PRIMARY KEY AUTO_INCREMENT,
 nome VARCHAR(100) NOT NULL,
@@ -118,49 +118,49 @@ preco DECIMAL(10, 2) NOT NULL
 );
 ```
 
-
+```sql
 CREATE TABLE categorias (
 id INT PRIMARY KEY AUTO_INCREMENT,
 nome VARCHAR(100) NOT NULL
 );
+```
 
-
-
+```sql
 CREATE TABLE produtos_categorias (
 produto_id INTEGER REFERENCES produtos(id),
 categoria_id INTEGER REFERENCES categorias(id)
 );
-
+```
 
 ### Questão 3
 **Liste os nomes de todos os produtos que custam mais de 100 reais, ordenando-os primeiramente pelo preço e em segundo lugar pelo nome. Use alias para mostrar o nome da coluna nome como "Produto" e da coluna preco como "Valor". A resposta da consulta não deve mostrar outras colunas de dados.**
 
 - **Listando produtos que custam mais de 100 reais:**
 
-
+```sql
 SELECT nome AS "Produto", preco AS "Valor"
 FROM produtos
 WHERE preco > 100
 ORDER BY preco ASC, nome ASC;
-
+```
 
 ### Questão 4
 **Liste todos os ids e preços de produtos cujo preço seja maior do que a média de todos os preços encontrados na tabela "produtos".**
 
 - **Listando produtos com preço maior que a média:**
 
-
+```sql
 SELECT id, preco
 FROM produtos
 WHERE preco > (SELECT AVG(preco) FROM produtos);
-
+```
 
 ### Questão 5
 **Para cada categoria, mostre o preço médio do conjunto de produtos a ela associados. Caso uma categoria não tenha nenhum produto a ela associada, esta categoria não deve aparecer no resultado final. A consulta deve estar ordenada pelos nomes das categorias.**
 
 - **Preço médio dos produtos por categoria:**
 
-
+```sql
 SELECT categorias.nome, AVG(produtos.preco) AS preco_medio
 FROM produtos
 JOIN produtos_categorias ON produtos.id = produtos_categorias.produto_id
@@ -168,7 +168,7 @@ JOIN categorias ON categorias.id = produtos_categorias.categoria_id
 GROUP BY categorias.nome
 HAVING COUNT(produtos.id) > 0
 ORDER BY categorias.nome ASC;
-
+```
 
 ---
 
@@ -181,18 +181,19 @@ Você está participando de um processo seletivo para trabalhar como cientista d
 
 
 TABELA 1
-
+```sql
 Nome da tabela: aluno
 Colunas da tabela: id_aluno (INT), nome_aluno (VARCHAR), aluno_alocado (BOOLEAN), id_turma (INT)
-
+```
 TABELA 2
-
+```sql
 Nome da tabela: turma
 Colunas da tabela: id_turma (INT), código_turma (VARCHAR), nome_turma (VARCHAR)
-
+```
 
 **Criação de tabelas (DDL):**
 
+```sql
 CREATE TABLE aluno (
   id_aluno INT PRIMARY KEY,
   nome_aluno VARCHAR(100),
@@ -205,7 +206,7 @@ CREATE TABLE turma (
   codigo_turma VARCHAR(100),
   nome_turma VARCHAR(100)
 );
-
+```
 
 ### Questão 7
 **Agora que você demonstrou que consegue ser mais do que um simples usuário do banco de dados, mostre separadamente cada um dos códigos DML necessários para cumprir cada uma das etapas a seguir:**
@@ -214,32 +215,33 @@ CREATE TABLE turma (
 
 - **a) Inserir pelo menos duas turmas diferentes na tabela de turma**
 
-
+```sql
 INSERT INTO turma (id_turma, codigo_turma, nome_turma)
 VALUES (1, 'TURMA01', 'Geografia'), (2, 'TURMA02', 'História');
-
+```
 
 - **b) Inserir pelo menos 1 aluno alocado em cada uma destas turmas na tabela aluno (todos com NULL na coluna aluno_alocado);**
 
-
+```sql
 INSERT INTO aluno (id_aluno, nome_aluno, aluno_alocado, id_turma)
 VALUES (1, 'Giovanni Ornellas', NULL, 1), (2, 'Maria Paula', NULL, 2);
-
+```
 
 - **c) Inserir pelo menos 2 alunos não alocados em nenhuma turma na tabela aluno (todos com NULL na coluna aluno_alocado)**
 
-
+```sql
 INSERT INTO aluno (id_aluno, nome_aluno, aluno_alocado, id_turma)
 VALUES (3, 'Murilo da Silva', NULL, NULL), (4, 'Lívia Nobre', NULL, NULL);
-
+```
 
 - **d) Atualizar a coluna aluno_alocado da tabela aluno, de modo que os alunos associados a uma disciplina recebam o valor `True` e alunos não associdos a nenhuma disciplina recebam o falor `False` para esta coluna.**
 
-
+```sql
 UPDATE aluno
 SET aluno_alocado = TRUE
 WHERE id_turma IS NOT NULL;
 
 UPDATE aluno
 SET aluno_alocado = FALSE
-WHERE id_turma
+WHERE id_turma IS NULL;
+```
